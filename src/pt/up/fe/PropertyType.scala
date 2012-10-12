@@ -1,9 +1,8 @@
 package pt.up.fe
 
-class PropertyType(val entityType: EntityType,
+protected class PropertyType(val entityType: EntityType,
 				   val name: String,
-				   var properties: List[Property] = Nil)
+				   val properties: List[Property] = Nil)
 {
-	entityType.properties = this :: entityType.properties
-
+  // Class Body intentionally left mostly blank.
 }
