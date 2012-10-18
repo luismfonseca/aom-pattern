@@ -37,7 +37,8 @@ class Universe(
   def previous = previousUni
   def wasMerge = previousOther != null
   
-  def newEntityType(et: EntityType) = new Universe(this, entityTypes + et, entities, propertyTypes, property)
+  def newEntityType(et: EntityType) =
+    new Universe(this, null, entityTypes + et, entities, propertyTypes, property, AddEntityType(et))
   
   def newEntity(e: Entity) = {
     val et = e.entityType
