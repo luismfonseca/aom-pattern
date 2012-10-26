@@ -1,51 +1,48 @@
 package pt.up.fe
 
-object BigBang extends Universe(null, Set.empty, Set.empty, Set.empty, Set.empty)
+object BigBang extends Universe(Set.empty, Set.empty, Set.empty, Set.empty)
 {
   override def wasMerge = false
-  override def previous = throw new Error("Universe.previous doesn't exist before Big Bang.")
 }
 
 class Universe(
-  previousUni		: Universe,
-  val previousOther : Universe,			// If not null, represents a merge
   val entityTypes	: Set[EntityType],
   val entities		: Set[Entity],
   val propertyTypes	: Set[PropertyType],
   val property		: Set[Property],
-  val transformAction: Action			// Action that transformed the previous universe into this one
+  val transformAction: List[Action]		// Actions that transformed the previous universe into this one
 )
 {
-  def this(previous		: Universe,
-		   entityTypes	: Set[EntityType],
+  def this(entityTypes	: Set[EntityType],
 		   entities		: Set[Entity],
 		   propertyTypes: Set[PropertyType],
 		   property		: Set[Property])
   {
-    this(previous, null, entityTypes, entities, propertyTypes, property, null)
+    this(entityTypes, entities, propertyTypes, property, List[Action]())
   }
   
-  def this(previous: Universe, previousOther: Universe)
-  {
-    // TODO: fun
-    // Find a universe where both diverged from & apply all actions since
-    this(previous, previousOther, null, null, null, null, null);
-  }
+  // TODO: fun
+  def merge(that : Universe) = new Universe(entityTypes, entities, propertyTypes, property, Merge(this, that) :: transformAction)
   
-  def merge(that : Universe) = new Universe(this, that)
-  
-  def previous = previousUni
-  def wasMerge = previousOther != null
+  def wasMerge = transformAction.isInstanceOf[Merge]
   
   def newEntityType(et: EntityType) =
-    new Universe(this, null, entityTypes + et, entities, propertyTypes, property, AddEntityType(et))
+    new Universe(entityTypes + et, entities, propertyTypes, property, AddEntityType(et) :: transformAction)
+  
+  
+  def Add(entity: Entity) = AddEntity(entity)(this)
+  //def Remove(entity: Entity) = RemoveEntity(entity)(this)
+  def Add(entityType: EntityType) = AddEntityType(entityType)(this)
+  
+  
+  def revert : Universe = transformAction.head.revertFrom(this)
+  
   
   def newEntity(e: Entity) = {
     val et = e.entityType
     val newET = new EntityType(et.name, et.properties, e :: et.entities)
     val newSetET = entityTypes - et + newET
-    
-    new Universe(this, null, newSetET, entities + e, propertyTypes, property, AddEntity(e))
+    new Universe(newSetET, entities + e, propertyTypes, property, AddEntity(e) :: transformAction)
   }
   
   def newPropertyType(pt: PropertyType) = {
@@ -53,7 +50,7 @@ class Universe(
     val newET = new EntityType(ptet.name, pt :: ptet.properties, ptet.entities)
     val netSetET = entityTypes - ptet + newET
     
-    new Universe(this, null, netSetET, entities, propertyTypes + pt, property, AddPropertyType(pt))
+    new Universe(netSetET, entities, propertyTypes + pt, property, AddPropertyType(pt) :: transformAction)
   }
   
   def newProperty(p: Property) = {
@@ -66,7 +63,7 @@ class Universe(
     val newPT	= new PropertyType(ppt.entityType, ppt.name, p :: ppt.properties)
     val newSetPT = propertyTypes - ppt + newPT
     
-    new Universe(this, null, entityTypes, newSetE, newSetPT, property + p, AddProperty(p))
+    new Universe(entityTypes, newSetE, newSetPT, property + p, AddProperty(p) :: transformAction)
   }
   
 }
