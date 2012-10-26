@@ -16,19 +16,28 @@ object test {
 	/* Updating Data */
 	val p1Description = Property(p1, description, "Tooth Removal")
 	
-    // Universe like
-	val u2 = BigBang.Add(p1)
 	
+    // Now, Universe like
+	/* Model */
+	val uni2 = BigBang.Add(EntityType("Procedure"))
+	val uni3 = uni2.Add(PropertyType(uni2.entityTypes.find(_.name == "Procedure").get, "Duration"))
 	
-	val finalUniverse = BigBang
-	  	.newEntityType(procedure)
-		.newPropertyType(duration)
-		.newEntity(p1)
-		.newPropertyType(description)
-		.newProperty(p1Description)
-	 
+	/* Data */
+	val uni4 = uni3.Add(Entity(uni2.entityTypes.find(_.name == "Procedure").get, "Surgery"))
+	val uni5 = uni4.Add(Property(uni4.entities.find(_.name == "Surgery").get,
+							     uni4.propertyTypes.find(_.name == "Duration").get,
+							     "00:35"))
+
+	/* Modifying Model */
+    val uni6 = uni5.Add(PropertyType(uni2.entityTypes.find(_.name == "Procedure").get, "Description"))
+    
+	/* Updating Data */
+	val uni7 = uni6.Add(Property(uni6.entities.find(_.name == "Surgery").get,
+								 uni6.propertyTypes.find(_.name == "Description").get,
+								 "Tooth Removal"))
+	
 	def showMeTheUniverse = {
-	  finalUniverse.entities foreach println
+	  uni7.entities foreach println
 	}
 }
 
@@ -54,7 +63,31 @@ object main {
       val uni3_sideuniverse = uni2.Add(EntityType("ProcedureAlternative"))
       val uni3merged = uni3.merge(uni3_sideuniverse)
       
-	  println("result:")
+	  println("result (uni3merged):")
 	  uni3merged.entityTypes foreach println
+	  
+	  println("new entity to uni3merged")
+      val uni4 = uni3merged.Add(Entity(uni3merged.entityTypes.find(_.name == "Procedure").get, "Surgery"))
+      
+	  uni4.entities foreach println
+	  uni4.entityTypes foreach println
+	  
+	  println("reverting to uni3merged")
+	  uni4.revert.entities foreach println
+	  uni4.revert.entityTypes foreach println
+	  
+	  println("adding propertyType duration")
+      val uni5 = uni4.Add(PropertyType(uni3merged.entityTypes.find(_.name == "Procedure").get, "Duration"))
+	  uni5.entities foreach println
+	  uni5.entityTypes foreach println
+	  uni5.propertyTypes foreach println
+	  
+	  println("reverting propertyType duration")
+	  uni5.revert.entities foreach println
+	  uni5.revert.entityTypes foreach println
+	  uni5.revert.propertyTypes foreach println
+	  
+	  println("example demo")
+	  test.showMeTheUniverse
     }
 }
