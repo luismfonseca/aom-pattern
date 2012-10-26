@@ -46,5 +46,15 @@ object main {
 	  
       println("Revert to uni1:")
 	  uni3.revert.revert.entityTypes foreach println
+	  
+      println("Revert to bb:")
+	  uni3.revert.revert.revert.entityTypes foreach println
+	  
+	  println("branching & merging")
+      val uni3_sideuniverse = uni2.Add(EntityType("ProcedureAlternative"))
+      val uni3merged = uni3.merge(uni3_sideuniverse)
+      
+	  println("result:")
+	  uni3merged.entityTypes foreach println
     }
 }

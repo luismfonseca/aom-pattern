@@ -51,10 +51,17 @@ case class AddPropertyType(val entity: PropertyType) extends Action
 	def revertFrom(that: Universe) = BigBang
 }
 
-case class Merge(val universe1 : Universe, val universe2: Universe) extends Action
+case class Merge(val universe : Universe) extends Action
 {
-	def apply(that: Universe) = BigBang
-	def revertFrom(that: Universe) = BigBang
+	def apply(other: Universe) = {
+	  // ignoring conflits
+	  universe.transformAction.foldLeft(other)((acc, cur) => cur.apply(acc))
+	}
+	
+	def revertFrom(other: Universe) = {
+	  other
+	  //universe
+	}
 }
 
 

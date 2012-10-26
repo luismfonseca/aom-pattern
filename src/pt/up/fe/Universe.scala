@@ -22,7 +22,7 @@ class Universe(
   }
   
   // TODO: fun
-  def merge(that : Universe) = new Universe(entityTypes, entities, propertyTypes, property, Merge(this, that) :: transformAction)
+  def merge(that : Universe): Universe = Merge(that)(this)
   
   def wasMerge = transformAction.isInstanceOf[Merge]
   
@@ -34,9 +34,7 @@ class Universe(
   //def Remove(entity: Entity) = RemoveEntity(entity)(this)
   def Add(entityType: EntityType) = AddEntityType(entityType)(this)
   
-  
   def revert : Universe = transformAction.head.revertFrom(this)
-  
   
   def newEntity(e: Entity) = {
     val et = e.entityType
