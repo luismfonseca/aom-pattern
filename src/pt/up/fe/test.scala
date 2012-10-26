@@ -20,20 +20,20 @@ object test {
     // Now, Universe like
 	/* Model */
 	val uni2 = BigBang.Add(EntityType("Procedure"))
-	val uni3 = uni2.Add(PropertyType(uni2.entityTypes.find(_.name == "Procedure").get, "Duration"))
+	val uni3 = uni2.Add(PropertyType(uni2.findEntityType("Procedure"), "Duration"))
 	
 	/* Data */
-	val uni4 = uni3.Add(Entity(uni2.entityTypes.find(_.name == "Procedure").get, "Surgery"))
-	val uni5 = uni4.Add(Property(uni4.entities.find(_.name == "Surgery").get,
-							     uni4.propertyTypes.find(_.name == "Duration").get,
+	val uni4 = uni3.Add(Entity(uni3.findEntityType("Procedure"), "Surgery"))
+	val uni5 = uni4.Add(Property(uni4.findEntity("Surgery"),
+							     uni4.findPropertyTypes("Duration"),
 							     "00:35"))
 
 	/* Modifying Model */
-    val uni6 = uni5.Add(PropertyType(uni2.entityTypes.find(_.name == "Procedure").get, "Description"))
+    val uni6 = uni5.Add(PropertyType(uni5.findEntityType("Procedure"), "Description"))
     
 	/* Updating Data */
-	val uni7 = uni6.Add(Property(uni6.entities.find(_.name == "Surgery").get,
-								 uni6.propertyTypes.find(_.name == "Description").get,
+	val uni7 = uni6.Add(Property(uni6.findEntity("Surgery"),
+								 uni6.findPropertyTypes("Description"),
 								 "Tooth Removal"))
 	
 	def showMeTheUniverse = {

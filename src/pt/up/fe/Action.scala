@@ -12,14 +12,14 @@ case class AddEntity(val entity: Entity) extends Action
 	    val et = entity.entityType
 	    val newET = new EntityType(et.name, et.properties, entity :: et.entities)
 	    val newSetET = that.entityTypes - et + newET
-	    new Universe(newSetET, that.entities + entity, that.propertyTypes, that.property, this :: that.transformAction)
+	    new Universe(newSetET, that.entities + entity, that.propertyTypes, that.properties, this :: that.transformAction)
 	}
 	
 	def revertFrom(that: Universe) =
 	{
 		val et = entity.entityType
 		val oldET = that.entityTypes.find(_.entities == entity :: et.entities).get
-		new Universe(that.entityTypes + et - oldET, that.entities.tail, that.propertyTypes, that.property, that.transformAction.tail)
+		new Universe(that.entityTypes + et - oldET, that.entities.tail, that.propertyTypes, that.properties, that.transformAction.tail)
 	}
 }
 
@@ -27,12 +27,12 @@ case class AddEntityType(val entityType: EntityType) extends Action
 {
 	def apply(that: Universe) =
 	{
-	  new Universe(that.entityTypes + entityType, that.entities, that.propertyTypes, that.property, this :: that.transformAction)
+	  new Universe(that.entityTypes + entityType, that.entities, that.propertyTypes, that.properties, this :: that.transformAction)
 	}
 	
 	def revertFrom(that: Universe) =
 	{
-	  new Universe(that.entityTypes - entityType, that.entities, that.propertyTypes, that.property, that.transformAction.tail)
+	  new Universe(that.entityTypes - entityType, that.entities, that.propertyTypes, that.properties, that.transformAction.tail)
 	}
 }
 
@@ -49,7 +49,7 @@ case class AddProperty(val property: Property) extends Action
 	    val newPT	= new PropertyType(ppt.entityType, ppt.name, property :: ppt.properties)
 	    val newSetPT = that.propertyTypes - ppt + newPT
 	    
-	    new Universe(that.entityTypes, newSetE, newSetPT, that.property + property, this :: that.transformAction)
+	    new Universe(that.entityTypes, newSetE, newSetPT, that.properties + property, this :: that.transformAction)
 	}
 	def revertFrom(that: Universe) =
 	{
@@ -59,7 +59,7 @@ case class AddProperty(val property: Property) extends Action
 		
 	    val oldPT = that.propertyTypes.find(_.properties == property :: ppt.properties).get
 		
-		new Universe(that.entityTypes, that.entities + pe - oldE, that.propertyTypes + ppt - oldPT, that.property.tail, that.transformAction.tail)
+		new Universe(that.entityTypes, that.entities + pe - oldE, that.propertyTypes + ppt - oldPT, that.properties.tail, that.transformAction.tail)
 	}
 }
 
@@ -72,7 +72,7 @@ case class AddPropertyType(val property: PropertyType) extends Action
 	    val newET = new EntityType(ptet.name, property :: ptet.properties, ptet.entities)
 	    val netSetET = that.entityTypes - ptet + newET
 	    
-	    new Universe(netSetET, that.entities, that.propertyTypes + property, that.property, this :: that.transformAction)
+	    new Universe(netSetET, that.entities, that.propertyTypes + property, that.properties, this :: that.transformAction)
 	}
 	
 	def revertFrom(that: Universe) =
@@ -80,7 +80,7 @@ case class AddPropertyType(val property: PropertyType) extends Action
 	    val ptet = property.entityType;
 	    val oldET = that.entityTypes.find(_.properties == property :: ptet.properties).get
 	  
-	    new Universe(that.entityTypes + ptet - oldET, that.entities, that.propertyTypes.tail, that.property, that.transformAction.tail)
+	    new Universe(that.entityTypes + ptet - oldET, that.entities, that.propertyTypes.tail, that.properties, that.transformAction.tail)
 	}
 }
 

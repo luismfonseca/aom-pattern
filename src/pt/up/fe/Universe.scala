@@ -9,16 +9,16 @@ class Universe(
   val entityTypes	: Set[EntityType],
   val entities		: Set[Entity],
   val propertyTypes	: Set[PropertyType],
-  val property		: Set[Property],
+  val properties	: Set[Property],
   val transformAction: List[Action]		// Actions that transformed the previous universe into this one
 )
 {
   def this(entityTypes	: Set[EntityType],
 		   entities		: Set[Entity],
 		   propertyTypes: Set[PropertyType],
-		   property		: Set[Property])
+		   properties	: Set[Property])
   {
-	  this(entityTypes, entities, propertyTypes, property, List[Action]())
+	  this(entityTypes, entities, propertyTypes, properties, List[Action]())
   }
   
   // TODO: fun
@@ -35,4 +35,10 @@ class Universe(
   //def Remove(entity: Entity) = RemoveEntity(entity)(this)
   
   def revert : Universe = transformAction.head.revertFrom(this)
+  
+  def findEntityType(name: String) = entityTypes.find(_.name == name).get
+  def findEntity(name: String) = entities.find(_.name == name).get
+  def findPropertyTypes(name: String) = propertyTypes.find(_.name == name).get
+  
+  
 }
