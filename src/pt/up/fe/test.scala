@@ -51,13 +51,13 @@ object main {
 	  
 	  uni3.entityTypes foreach println
       println("Revert to uni2:")
-	  uni3.revert.entityTypes foreach println
+	  uni3.revert.left.get.entityTypes foreach println
 	  
       println("Revert to uni1:")
-	  uni3.revert.revert.entityTypes foreach println
+	  uni3.revert.left.get.revert.left.get.entityTypes foreach println
 	  
       println("Revert to bb:")
-	  uni3.revert.revert.revert.entityTypes foreach println
+	  uni3.revert.left.get.revert.left.get.revert.left.get.entityTypes foreach println
 	  
 	  println("branching & merging")
       val uni3_sideuniverse = uni2.Add(EntityType("ProcedureAlternative"))
@@ -73,8 +73,8 @@ object main {
 	  uni4.entityTypes foreach println
 	  
 	  println("reverting to uni3merged")
-	  uni4.revert.entities foreach println
-	  uni4.revert.entityTypes foreach println
+	  uni4.revert.left.get.entities foreach println
+	  uni4.revert.left.get.entityTypes foreach println
 	  
 	  println("adding propertyType duration")
       val uni5 = uni4.Add(PropertyType(uni3merged.entityTypes.find(_.name == "Procedure").get, "Duration"))
@@ -83,9 +83,9 @@ object main {
 	  uni5.propertyTypes foreach println
 	  
 	  println("reverting propertyType duration")
-	  uni5.revert.entities foreach println
-	  uni5.revert.entityTypes foreach println
-	  uni5.revert.propertyTypes foreach println
+	  uni5.revert.left.get.entities foreach println
+	  uni5.revert.left.get.entityTypes foreach println
+	  uni5.revert.left.get.propertyTypes foreach println
 	  
 	  println("example demo")
 	  test.showMeTheUniverse

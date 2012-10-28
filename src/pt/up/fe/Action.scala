@@ -1,8 +1,8 @@
 package pt.up.fe
 
 trait Action {
-  def apply(that: Universe): Universe
-  def revertFrom(that: Universe): Universe
+	def apply(that: Universe): Universe
+	def revertFrom(that: Universe): Either[Universe, (Universe, Universe)]
 }
 
 case class AddEntity(val entity: Entity) extends Action
@@ -19,7 +19,7 @@ case class AddEntity(val entity: Entity) extends Action
 	{
 		val et = entity.entityType
 		val oldET = that.entityTypes.find(_.entities == entity :: et.entities).get
-		new Universe(that.entityTypes + et - oldET, that.entities.tail, that.propertyTypes, that.properties, that.transformAction.tail)
+		Left(new Universe(that.entityTypes + et - oldET, that.entities.tail, that.propertyTypes, that.properties, that.transformAction.tail))
 	}
 }
 
@@ -32,7 +32,7 @@ case class AddEntityType(val entityType: EntityType) extends Action
 	
 	def revertFrom(that: Universe) =
 	{
-	  new Universe(that.entityTypes - entityType, that.entities, that.propertyTypes, that.properties, that.transformAction.tail)
+	  Left(new Universe(that.entityTypes - entityType, that.entities, that.propertyTypes, that.properties, that.transformAction.tail))
 	}
 }
 
@@ -51,6 +51,7 @@ case class AddProperty(val property: Property) extends Action
 	    
 	    new Universe(that.entityTypes, newSetE, newSetPT, that.properties + property, this :: that.transformAction)
 	}
+	
 	def revertFrom(that: Universe) =
 	{
 	    val pe = property.entity
@@ -59,7 +60,7 @@ case class AddProperty(val property: Property) extends Action
 		
 	    val oldPT = that.propertyTypes.find(_.properties == property :: ppt.properties).get
 		
-		new Universe(that.entityTypes, that.entities + pe - oldE, that.propertyTypes + ppt - oldPT, that.properties.tail, that.transformAction.tail)
+		Left(new Universe(that.entityTypes, that.entities + pe - oldE, that.propertyTypes + ppt - oldPT, that.properties.tail, that.transformAction.tail))
 	}
 }
 
@@ -80,7 +81,7 @@ case class AddPropertyType(val property: PropertyType) extends Action
 	    val ptet = property.entityType;
 	    val oldET = that.entityTypes.find(_.properties == property :: ptet.properties).get
 	  
-	    new Universe(that.entityTypes + ptet - oldET, that.entities, that.propertyTypes.tail, that.properties, that.transformAction.tail)
+	    Left(new Universe(that.entityTypes + ptet - oldET, that.entities, that.propertyTypes.tail, that.properties, that.transformAction.tail))
 	}
 }
 
@@ -92,8 +93,7 @@ case class Merge(val universe : Universe) extends Action
 	}
 	
 	def revertFrom(other: Universe) = {
-	  other
-	  //universe
+	  Right(universe, other)
 	}
 }
 
