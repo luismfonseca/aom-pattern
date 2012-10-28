@@ -3,8 +3,10 @@ name := "aom-pattern"
 // will increment by .1 by each week
 version := "0.2"
 
-// latest & greatest
-scalaVersion := "2.10.0-M7"
+// Stable scala
+scalaVersion := "2.9.2"
 
-// to be considered
-// libraryDependencies += "junit" % "junit" % "4.8" % "test"
+// testing
+libraryDependencies += "org.scalatest" %% "scalatest" % "1.8" % "test"
+
+libraryDependencies += "junit" % "junit" % "4.10" % "test"
