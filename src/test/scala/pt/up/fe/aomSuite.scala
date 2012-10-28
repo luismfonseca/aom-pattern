@@ -21,6 +21,16 @@ class aomSuite  extends FunSuite {
 		val uni2 = uni.Add(EntityType("ProcedureSuperSpecial"))
 		
 		assert(uni.entityTypes.size == 1)
+		assert(uni.findEntityType("Procedure").isDefined)
 		assert(uni2.entityTypes.size == 2)
+		assert(uni2.findEntityType("ProcedureSuperSpecial").isDefined)
+	}
+	
+	test("Adding property types") {
+		val uni = BigBang.Add(EntityType("Procedure"))
+		val uni2 = uni.Add(PropertyType(uni.findEntityType("Procedure").get, "Duration"))
+		
+		assert(uni2.propertyTypes.size == 1)
+		assert(uni2.findPropertyTypes("Duration").isDefined)
 	}
 }

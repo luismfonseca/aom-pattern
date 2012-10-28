@@ -20,20 +20,20 @@ object test {
     // Now, Universe like
 	/* Model */
 	val uni2 = BigBang.Add(EntityType("Procedure"))
-	val uni3 = uni2.Add(PropertyType(uni2.findEntityType("Procedure"), "Duration"))
+	val uni3 = uni2.Add(PropertyType(uni2.findEntityType("Procedure").get, "Duration"))
 	
 	/* Data */
-	val uni4 = uni3.Add(Entity(uni3.findEntityType("Procedure"), "Surgery"))
-	val uni5 = uni4.Add(Property(uni4.findEntity("Surgery"),
-							     uni4.findPropertyTypes("Duration"),
+	val uni4 = uni3.Add(Entity(uni3.findEntityType("Procedure").get, "Surgery"))
+	val uni5 = uni4.Add(Property(uni4.findEntity("Surgery").get,
+							     uni4.findPropertyTypes("Duration").get,
 							     "00:35"))
 
 	/* Modifying Model */
-    val uni6 = uni5.Add(PropertyType(uni5.findEntityType("Procedure"), "Description"))
+    val uni6 = uni5.Add(PropertyType(uni5.findEntityType("Procedure").get, "Description"))
     
 	/* Updating Data */
-	val uni7 = uni6.Add(Property(uni6.findEntity("Surgery"),
-								 uni6.findPropertyTypes("Description"),
+	val uni7 = uni6.Add(Property(uni6.findEntity("Surgery").get,
+								 uni6.findPropertyTypes("Description").get,
 								 "Tooth Removal"))
 	
 	def showMeTheUniverse = {
@@ -67,7 +67,7 @@ object main {
 	  uni3merged.entityTypes foreach println
 	  
 	  println("new entity to uni3merged")
-      val uni4 = uni3merged.Add(Entity(uni3merged.entityTypes.find(_.name == "Procedure").get, "Surgery"))
+      val uni4 = uni3merged.Add(Entity(uni3merged.findEntityType("Procedure").get, "Surgery"))
       
 	  uni4.entities foreach println
 	  uni4.entityTypes foreach println
@@ -77,7 +77,7 @@ object main {
 	  uni4.revert.left.get.entityTypes foreach println
 	  
 	  println("adding propertyType duration")
-      val uni5 = uni4.Add(PropertyType(uni3merged.entityTypes.find(_.name == "Procedure").get, "Duration"))
+      val uni5 = uni4.Add(PropertyType(uni3merged.findEntityType("Procedure").get, "Duration"))
 	  uni5.entities foreach println
 	  uni5.entityTypes foreach println
 	  uni5.propertyTypes foreach println

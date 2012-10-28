@@ -22,7 +22,7 @@ class Universe(
   
   def revert = transformAction.head.revertFrom(this)
   
-  def findEntityType(name: String) = entityTypes.find(_.name == name).get
-  def findEntity(name: String) = entities.find(_.name == name).get
-  def findPropertyTypes(name: String) = propertyTypes.find(_.name == name).get
+  def findEntityType(name: String) = entityTypes.find(_.name == name)
+  def findEntity(name: String) = entities.find(_.name == name)
+  def findPropertyTypes(name: String) = propertyTypes.find(_.name == name)
 }
