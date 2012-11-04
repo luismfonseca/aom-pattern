@@ -12,10 +12,12 @@ class Universe(
 {
   def merge(that : Universe): Universe = Merge(that)(this)
   
-  def Add(entity: Entity) = AddEntity(entity)(this)
-  def Add(entityType: EntityType) = AddEntityType(entityType)(this)
-  def Add(propertyType: PropertyType) = AddPropertyType(propertyType)(this)
-  def Add(property: Property) = AddProperty(property)(this)
+  def Add(thing: Thing) = thing match {
+    case e : Entity => AddEntity(e)(this)
+    case et: EntityType => AddEntityType(et)(this)
+    case pt: PropertyType => AddPropertyType(pt)(this)
+    case p : Property => AddProperty(p)(this) 
+  }
   
   // TODO: Add removes
   //def Remove(entity: Entity) = RemoveEntity(entity)(this)
