@@ -1,6 +1,16 @@
 package pt.up.fe
 
-sealed abstract class Thing
+sealed abstract class Thing {
+  
+  
+  def map[T <: Thing](f: T => Array[Set[Thing]]): T => Universe =
+    (thing: T) => new Universe(f(thing))
+  
+  
+  def AddSomething[S <: Thing](something: S => Array[Set[Thing]]) = map(something)
+  
+}
+
 protected case class Entity(
 	val entityType: EntityType,
 	val name: String,

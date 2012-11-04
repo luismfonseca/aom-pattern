@@ -2,6 +2,10 @@ package pt.up.fe
 
 object NotMultiverse extends Multiverse(Vector())
 
+object Multiverse {
+  type Universe = Array[Set[Thing]]
+}
+
 class Multiverse
   (val space: Vector[Universe])
 {
