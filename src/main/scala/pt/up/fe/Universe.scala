@@ -10,6 +10,13 @@ class Universe(
   val transformAction: List[Action]		// Actions that transformed the previous universes into this one
 )
 {
+  def this(things: Array[Set[Thing]]) = {
+    this(things(0).asInstanceOf[Set[EntityType]],
+        things(1).asInstanceOf[Set[Entity]],
+        things(2).asInstanceOf[Set[PropertyType]],
+        things(3).asInstanceOf[Set[Property]], List[Action]())
+  }
+  
   def merge(that : Universe): Universe = Merge(that)(this)
   
   def Add(thing: Thing) = thing match {
