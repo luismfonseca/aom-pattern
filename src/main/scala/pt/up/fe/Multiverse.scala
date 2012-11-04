@@ -10,7 +10,14 @@ class Multiverse
   (val space: Vector[Universe])
 {
   
-  def apply(that: Universe, thing: Thing) =
-    new Multiverse(space.updated(space.indexOf(that), that.Add(thing)))
-  
+  def apply(that: Universe, thing: Thing) = {
+    
+    new Multiverse(
+      space.updated(space.indexOf(that),
+      Thing.AddSomething(thing)
+      	(t => {
+      	  that.Add(t)
+      	}))
+    )
+  }
 }

@@ -1,14 +1,14 @@
 package pt.up.fe
 
 sealed abstract class Thing {
+}
+
+object Thing {
   
+  def map[T <: Thing](r: T, f: Thing => Universe): Universe = f(r)
   
-  def map[T <: Thing](f: T => Array[Set[Thing]]): T => Universe =
-    (thing: T) => new Universe(f(thing))
-  
-  
-  def AddSomething[S <: Thing](something: S => Array[Set[Thing]]) = map(something)
-  
+  def AddSomething[S <: Thing](something: S)(action: Thing => Universe) =
+    map(something, action)
 }
 
 protected case class Entity(
