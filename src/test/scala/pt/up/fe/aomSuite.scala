@@ -8,7 +8,7 @@ import org.scalatest.junit.JUnitRunner
 import pt.up.fe._
 
 @RunWith(classOf[JUnitRunner])
-class aomSuite  extends FunSuite {
+class aomSuite extends FunSuite {
 	test("bigbang is completely empty") {
 		assert(BigBang.entities.isEmpty)
 		assert(BigBang.entityTypes.isEmpty)
